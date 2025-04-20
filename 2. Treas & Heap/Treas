@@ -1,0 +1,9 @@
+1. Write an implementation of Treap (using either static or user-input values)
+2. Create a function for insert, remove and search. 
+3. Simulate the results (you may show the AVL rotations) on how the values were inserted
+and removed.
+
+If you still have time:
+
+1. Compare it using a Tree and a Heap. 
+2. Create another function for split and merge. (segmented trees)
