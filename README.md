@@ -1,2 +1,2 @@
 # Advanced-Data-Structures-and-Algorithms
-This repository contains my work for the Advanced Data Structures and Algorithms course. 
+This repository contains my work for the Advanced Data Structures and Algorithms course. It is intended to support the understanding and exploration of both static and dynamic data structures, recursive and iterative techniques for sorting and searching, object-oriented design and programming principles, software design models with corresponding implementation and testing strategies, and the ethical and professional responsibilities within the field.
