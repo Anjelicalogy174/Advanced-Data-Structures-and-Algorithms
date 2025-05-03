@@ -1,0 +1,138 @@
+{
+  "nbformat": 4,
+  "nbformat_minor": 0,
+  "metadata": {
+    "colab": {
+      "provenance": []
+    },
+    "kernelspec": {
+      "name": "python3",
+      "display_name": "Python 3"
+    },
+    "language_info": {
+      "name": "python"
+    }
+  },
+  "cells": [
+    {
+      "cell_type": "code",
+      "source": [
+        "class NaiveDisjointSet:\n",
+        "    def __init__(self):\n",
+        "        self.parent = {}\n",
+        "\n",
+        "    def make_set(self, x):\n",
+        "        self.parent[x] = x\n",
+        "\n",
+        "    def find(self, x):\n",
+        "        while self.parent[x] != x:\n",
+        "            x = self.parent[x]\n",
+        "        return x\n",
+        "\n",
+        "    def union(self, x, y):\n",
+        "        x_root = self.find(x)\n",
+        "        y_root = self.find(y)\n",
+        "        if x_root != y_root:\n",
+        "            self.parent[y_root] = x_root\n"
+      ],
+      "metadata": {
+        "id": "zNnCpWtRrQ4Y"
+      },
+      "execution_count": 10,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "class TreeDisjointSet:\n",
+        "    def __init__(self):\n",
+        "        self.parent = {}\n",
+        "        self.rank = {}\n",
+        "\n",
+        "    def make_set(self, x):\n",
+        "        self.parent[x] = x\n",
+        "        self.rank[x] = 0\n",
+        "\n",
+        "    def find(self, x):\n",
+        "        if self.parent[x] != x:\n",
+        "            self.parent[x] = self.find(self.parent[x])\n",
+        "        return self.parent[x]\n",
+        "\n",
+        "    def union(self, x, y):\n",
+        "        x_root = self.find(x)\n",
+        "        y_root = self.find(y)\n",
+        "        if x_root == y_root:\n",
+        "            return\n",
+        "        if self.rank[x_root] < self.rank[y_root]:\n",
+        "            self.parent[x_root] = y_root\n",
+        "        elif self.rank[x_root] > self.rank[y_root]:\n",
+        "            self.parent[y_root] = x_root\n",
+        "        else:\n",
+        "            self.parent[y_root] = x_root\n",
+        "            self.rank[x_root] += 1"
+      ],
+      "metadata": {
+        "id": "4UgjI5-drTnk"
+      },
+      "execution_count": 14,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "from collections import defaultdict\n",
+        "\n",
+        "def group_items(ds_class, menu, purchases):\n",
+        "    ds = ds_class()\n",
+        "    for item in menu:\n",
+        "        ds.make_set(item)\n",
+        "    for x, y in purchases:\n",
+        "        ds.union(x, y)\n",
+        "\n",
+        "    clusters = defaultdict(list)\n",
+        "    for item in menu:\n",
+        "        root = ds.find(item)\n",
+        "        clusters[root].append(item)\n",
+        "\n",
+        "    return list(clusters.values())\n",
+        "\n",
+        "# --- Section 5: Run Analysis and Print Results ---\n",
+        "\n",
+        "print(\"Using Naive Disjoint Set:\")\n",
+        "naive_groups = group_items(NaiveDisjointSet, menu_items, co_purchases)\n",
+        "for group in naive_groups:\n",
+        "    print(\", \".join(group))\n",
+        "\n",
+        "print(\"\\nUsing Optimized Tree Disjoint Set:\")\n",
+        "tree_groups = group_items(TreeDisjointSet, menu_items, co_purchases)\n",
+        "for group in tree_groups:\n",
+        "    print(\", \".join(group))"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "fMWgQDlvlwaC",
+        "outputId": "e86a86b3-df91-450a-b552-309adfe804fc"
+      },
+      "execution_count": 12,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "Using Naive Disjoint Set:\n",
+            "Burger, Fries, Coke\n",
+            "Ice Cream, Pasta, Cookies\n",
+            "Coffee, Milk Tea\n",
+            "\n",
+            "Using Optimized Tree Disjoint Set:\n",
+            "Burger, Fries, Coke\n",
+            "Ice Cream, Pasta, Cookies\n",
+            "Coffee, Milk Tea\n"
+          ]
+        }
+      ]
+    }
+  ]
+}
